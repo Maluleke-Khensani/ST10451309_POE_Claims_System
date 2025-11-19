@@ -1,0 +1,84 @@
+﻿@model Claims_System.Models.LecturerProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<a asp-controller="Lecturer" asp-action="Index" class="btn btn-secondary mb-3">
+    Back to Home
+</a>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card p-4">
+                <h3 class="card-header">Lecturer Profile</h3>
+                <div class="card-body">
+
+                    <p><strong>Full Name:</strong> @Model.FullName</p>
+                    <p><strong>Email:</strong> @Model.Email</p>
+                    <p><strong>Hourly Rate:</strong> R @Model.HourlyRate:N2</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card p-4">
+                <h3 class="card-header">My Claims</h3>
+                <div class="card-body">
+                    @if (Model.Claims != null && Model.Claims.Any())
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Month/Year</th>
+                                    <th>Module</th>
+                                    <th>Hours Worked</th>
+                                    <th>Rate (R)</th>
+                                    <th>Total (R)</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var claim in Model.Claims)
+                                {
+                                    <tr>
+                                        <td>@claim.Month/@claim.Year</td>
+                                        <td>@claim.ModuleName</td>
+                                        <td>@claim.HoursWorked:N2</td>
+                                        <td>@claim.Rate:N2</td>
+                                        <td>@claim.Total:N2</td>
+                                        <td>
+                                            @if (claim.ManagerStatus == "Approved" && claim.CoordinatorStatus == "Approved")
+                                            {
+                                                <span class="text-success">Approved</span>
+                                            }
+                                            else if (claim.ManagerStatus == "Rejected" || claim.CoordinatorStatus == "Rejected")
+                                            {
+                                                <span class="text-danger">Rejected</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-warning">Pending</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a asp-action="ViewClaim" asp-route-id="@claim.ClaimId" class="btn btn-button3 btn-sm">View</a>
+                                            <a asp-action="Edit" asp-route-id="@claim.ClaimId" class="btn btn-button2 btn-sm">Edit</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>No claims submitted yet.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

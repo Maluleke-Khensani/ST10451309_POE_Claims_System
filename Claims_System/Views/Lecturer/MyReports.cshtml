@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Claims_System.Models.LecturerClaim>
+@{
+    ViewData["Title"] = "My Reports";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<a asp-controller="Lecturer" asp-action="Index" class="btn btn-secondary mb-3">
+    Back to Home
+</a>
+<div class="table-responsive shadow-sm rounded mt-3">
+    <table class="table table-hover table-striped align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Month / Year</th>
+                <th>Total (R)</th>
+                <th>Status</th>
+                <th class="text-end">Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.Month / @claim.Year</td>
+                    <td>R @claim.Total.ToString("N2")</td>
+                    <td>
+                        <span class="badge @(claim.ManagerStatus == "Approved" && claim.CoordinatorStatus == "Approved"
+                                                                       ? "bg-success"
+                                                                       : claim.ManagerStatus == "Rejected" || claim.CoordinatorStatus == "Rejected"
+                                                                       ? "bg-danger"
+                                                                       : "bg-warning text-dark")">
+                            @(claim.ManagerStatus == "Approved" && claim.CoordinatorStatus == "Approved" ? "Approved" : claim.ManagerStatus == "Rejected" || claim.CoordinatorStatus == "Rejected" ? "Rejected" : "Pending")
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        @if (claim.ManagerStatus == "Approved" && claim.CoordinatorStatus == "Approved")
+                        {
+                            <a asp-controller="HR"
+                               asp-action="GenerateReportForLecturer"
+                               asp-route-userId="@claim.UserId"
+                               class="btn btn-primary btn-sm">
+                                Download PDF
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
