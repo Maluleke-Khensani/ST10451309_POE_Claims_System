@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "HR Dashboard";
+}
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">HR Dashboard</h1>
+        <span class="text-muted">Welcome, @User.Identity.Name</span>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- User Management Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">User Management</h5>
+                    <p class="card-text">Add, edit, or delete users. Assign roles and manage lecturer information.</p>
+                    <a class="btn btn-primary btn-sm mb-2" asp-controller="HR" asp-action="CreateUser">Create User</a>
+                    <a class="btn btn-secondary btn-sm" asp-controller="HR" asp-action="ListUsers">View Users</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports / Invoices Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Reports / Invoices</h5>
+                    <p class="card-text">Generate claim reports or invoices for lecturers. Export as PDF for download.</p>
+                    <a class="btn btn-success btn-sm" asp-controller="HR" asp-action="GenerateReport">Generate Report</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approvals Card (Optional quick links) -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Approvals Overview</h5>
+                    <p class="card-text">Quick access to pending claims for Programme Coordinators or Academic Managers.</p>
+                    <a class="btn btn-info btn-sm mb-2"
+                       asp-controller="Coordinator"
+                       asp-action="Index">
+                        View Coordinator Claims
+                    </a>
+
+                    <a class="btn btn-warning btn-sm"
+                       asp-controller="Manager"
+                       asp-action="Index">
+                        View Manager Claims
+                    </a>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+    </script>
+}

@@ -1,0 +1,6 @@
+Please provide the following files for analysis:
+- Areas/Identity/Data/ApplicationDbContext.cs
+- Migrations/20251116201020_AddLecturerProfile.cs
+- Models/ApplicationUser.cs
+
+(This is an automated request from the assistant.)

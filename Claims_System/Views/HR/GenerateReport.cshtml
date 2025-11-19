@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Claims_System.Models.LecturerProfile>
+
+<h2>Lecturers</h2>
+
+<a asp-controller="Hr" asp-action="HRDashboard" class="btn btn-secondary mb-3">
+    Back to Home
+</a>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Hourly Rate</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lecturer in Model)
+        {
+            <tr>
+                <td>@lecturer.FullName</td>
+                <td>@lecturer.Email</td>
+                <td>R @lecturer.HourlyRate:N2</td>
+                <td>
+                    <a asp-controller="HR"
+                       asp-action="GenerateReportForLecturer"
+                       asp-route-userId="@lecturer.UserId"
+                       class="btn btn-primary btn-sm">
+                        Generate PDF
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
