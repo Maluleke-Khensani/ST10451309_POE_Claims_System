@@ -1,0 +1,81 @@
+﻿@model Claims_System.Models.LecturerClaim
+@{
+    ViewData["Title"] = "Edit Claim";
+}
+
+<a asp-controller="Lecturer" asp-action="Index" class="btn btn-secondary mb-3">
+    Back to Home
+</a>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <!-- Left info panel -->
+        <div class="col-md-4 mb-4">
+            <div class="bg-primary text-white p-4 rounded-start shadow">
+                <h4 class="fw-bold">Edit Claim</h4>
+                <p class="small">Use this form to update the details of your claim.</p>
+                <ul class="list-unstyled mt-3">
+                    <li><strong>Tip:</strong> Ensure hours & rate are correct.</li>
+                    <li><strong>Tip:</strong> Notes can include any context or justification.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Form panel -->
+        <div class="col-md-6">
+            <div class="p-4 border rounded-end shadow-sm bg-light">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <p class="mb-0">@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
+
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="ClaimId" />
+                    <input type="hidden" asp-for="Username" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Submitted By</label>
+                        <input type="text" class="form-control" value="@Model.Username" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ModuleName" class="form-label"></label>
+                        <input asp-for="ModuleName" class="form-control" placeholder="Enter title" />
+                        <span asp-validation-for="ModuleName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <div class="col">
+                            <label asp-for="HoursWorked" class="form-label"></label>
+                            <input asp-for="HoursWorked" class="form-control" type="number" />
+                        </div>
+                        <div class="col">
+                            <label asp-for="Rate" class="form-label"></label>
+                            <input asp-for="Rate" class="form-control" type="number" step="0.01" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Notes" class="form-label"></label>
+                        <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Additional notes"></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success flex-fill">Save Changes</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary flex-fill">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

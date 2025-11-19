@@ -1,0 +1,106 @@
+﻿@model IEnumerable<Claims_System.Models.LecturerClaim>
+
+@{
+    ViewData["Title"] = "Lecturer Dashboard";
+
+    var totalClaims = Model.Count();
+    var pendingClaims = Model.Count(c => c.CoordinatorStatus == "Pending" || c.ManagerStatus == "Pending");
+    var approvedClaims = Model.Count(c => c.ManagerStatus == "Approved");
+    var rejectedClaims = Model.Count(c => c.ManagerStatus == "Rejected");
+
+    var userFullName = User.Identity.Name; 
+}
+
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4">Welcome, @userFullName!</h2>
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <button class="btn btn-danger">Logout</button>
+        </form>
+    </div>
+
+    <!-- Quick Action Buttons -->
+    <div class="d-flex gap-2 mb-4 flex-wrap">
+        <a class="btn btn-primary" href="/Lecturer/ClaimForm">Create Monthly Claim</a>
+        <a class="btn btn-secondary" href="/Lecturer/Index">View My Claims</a>
+        <a class="btn btn-info" href="/Account/Profile">Profile</a>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="row text-center mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6>Total Claims</h6>
+                    <h3>@totalClaims</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6>Pending</h6>
+                    <h3 class="text-warning">@pendingClaims</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6>Approved</h6>
+                    <h3 class="text-success">@approvedClaims</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6>Rejected</h6>
+                    <h3 class="text-danger">@rejectedClaims</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Claims -->
+    <h4 class="h6 mb-3">Recent Claims</h4>
+    <div class="table-responsive shadow-sm rounded mb-4">
+        <table class="table table-hover table-striped align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Month</th>
+                    <th>Submitted</th>
+                    <th>Status</th>
+                    <th class="text-end">Total (ZAR)</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var claim in Model.Take(5))
+                {
+                    <tr>
+                        <td>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(claim.Month) @claim.Year</td>
+                        <td>@claim.Submitted.ToShortDateString()</td>
+                        <td>
+                            <span class="badge @(claim.ManagerStatus == "Approved" ? "bg-success" : claim.ManagerStatus == "Rejected" ? "bg-danger" : "bg-warning text-dark")">
+                                @claim.ManagerStatus
+                            </span>
+                        </td>
+                        <td class="text-end">R @(claim.Total.ToString("N2"))</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="ViewClaim" asp-route-id="@claim.ClaimId">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+    </script>
+}

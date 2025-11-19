@@ -1,0 +1,171 @@
+﻿@model Claims_System.Models.LecturerClaimViewModel
+@{
+    ViewData["Title"] = "Create Monthly Claim";
+}
+<a asp-controller="Lecturer" asp-action="Index" class="btn btn-secondary mb-3">
+    Back to Home
+</a>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h5 mb-0">Create Monthly Claim</h1>
+    <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Back to Dashboard</a>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+
+        <form asp-action="ClaimForm" enctype="multipart/form-data" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Lecturer information -->
+            <h6 class="text-muted mb-2">Lecturer Information</h6>
+            <div class="row g-3 mb-3">
+                <div class="col-sm-6">
+                    <label class="form-label">Username</label>
+                    <input type="text" value="@ViewBag.Username" class="form-control" readonly />
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" value="@ViewBag.FullName" readonly />
+                </div>
+            </div>
+
+            <!-- Claim period -->
+            <h6 class="text-muted mb-2">Claim Period</h6>
+            <div class="row g-3">
+                <div class="col-sm-4">
+                    <label class="form-label">Month</label>
+                    <select asp-for="Month" class="form-select">
+                        @for (int m = 1; m <= 12; m++)
+                        {
+                            <option value="@m">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m)</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Month" class="text-danger"></span>
+                </div>
+
+                <div class="col-sm-4">
+                    <label class="form-label">Year</label>
+                    <select asp-for="Year" class="form-select">
+                        @for (int y = DateTime.Now.Year; y <= DateTime.Now.Year + 3; y++)
+                        {
+                            <option value="@y">@y</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Year" class="text-danger"></span>
+                </div>
+
+                <div class="col-sm-4">
+                    <label class="form-label">Submitted</label>
+                    <input type="date" value="@ViewBag.Submitted" class="form-control" readonly />
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <!-- Claim Details -->
+            <h6 class="text-muted mb-2">Claim Details</h6>
+
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Module</th>
+                        <th>Hours Worked <small class="text-muted">(Max 180)</small></th>
+                        <th>Rate (R)</th>
+                        <th>Total (R)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select asp-for="ModuleName" class="form-select">
+                                <option>Programming 1A</option>
+                                <option>Cloud Development</option>
+                                <option>Database Systems</option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <input asp-for="HoursWorked" type="number" step="0.1" min="0" max="180"
+                                   class="form-control" id="hoursInput" />
+                            <span asp-validation-for="HoursWorked" class="text-danger"></span>
+                        </td>
+
+                        <td>
+                            <input type="hidden" asp-for="Rate" value="@ViewBag.Rate" />
+                            <input type="text" class="form-control" readonly id="rateInput" value="@ViewBag.Rate" />
+                        </td>
+
+                        <td>
+                            <input type="text" class="form-control" readonly id="totalInput" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mb-3">
+                <label class="form-label">Notes</label>
+                <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Add any relevant notes"></textarea>
+            </div>
+
+            <!-- Documents -->
+            <h6 class="text-muted mt-3">Supporting Documents</h6>
+            <p class="text-muted small">Allowed: .pdf, .docx, .xlsx — Max: 5MB</p>
+
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6">
+                    <label class="form-label">Document 1</label>
+                    <input name="Document1" type="file" class="form-control" />
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="form-label">Document 2</label>
+                    <input name="Document2" type="file" class="form-control" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit Claim</button>
+            <a class="btn btn-outline-secondary ms-2" asp-action="Index">Cancel</a>
+
+        </form>
+
+    </div>
+</div>
+ 
+}
+
+
+@section Scripts {
+    <script>
+        function calculateTotal() {
+            // get hours worked
+            var hours = parseFloat(document.getElementById("hoursInput").value) || 0;
+
+            // get rate directly from the input (pre-filled from ViewBag)
+            var rate = parseFloat(document.getElementById("rateInput").value) || 0;
+
+            // calculate total
+            var total = hours * rate;
+
+            // update total input
+            document.getElementById("totalInput").value = total.toFixed(2);
+        }
+
+        // attach event listener
+        document.getElementById("hoursInput").addEventListener("input", calculateTotal);
+
+        // calculate total on page load
+        window.addEventListener("DOMContentLoaded", calculateTotal);
+    </script>
+}

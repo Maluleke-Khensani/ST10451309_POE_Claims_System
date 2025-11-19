@@ -1,0 +1,77 @@
+﻿@model Claims_System.Models.LecturerClaim
+@{
+    ViewData["Title"] = "View Claim";
+}
+
+<a asp-controller="Lecturer" asp-action="Index" class="btn btn-secondary mb-3">
+    Back to Home
+</a>
+<div class="container mt-5">
+    <h2 class="mb-4">Claim Details</h2>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">@Model.FullName - @Model.ModuleName</h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-md-4 fw-bold">Hours Worked:</div>
+                <div class="col-md-8">@Model.HoursWorked</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4 fw-bold">Rate:</div>
+                <div class="col-md-8">R @Model.Rate</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4 fw-bold">Total:</div>
+                <div class="col-md-8">R @Model.Total.ToString("N2")</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4 fw-bold">Notes:</div>
+                <div class="col-md-8">@Model.Notes</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4 fw-bold">Coordinator Status:</div>
+                <div class="col-md-8">
+                    <span class="badge @(Model.CoordinatorStatus == "Approved" ? "bg-success" : Model.CoordinatorStatus == "Rejected" ? "bg-danger" : "bg-info")">
+                        @Model.CoordinatorStatus
+                    </span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Manager Status:</div>
+                <div class="col-md-8">
+                    <span class="badge @(Model.ManagerStatus == "Approved" ? "bg-success" : Model.ManagerStatus == "Rejected" ? "bg-danger" : "bg-info")">
+                        @Model.ManagerStatus
+                    </span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <h6>Documents</h6>
+                <ul class="list-group list-group-flush">
+                    @if (!string.IsNullOrEmpty(Model.Document1FileName))
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Model.Document1FileName
+                            <a class="btn btn-sm btn-primary" asp-action="DownloadDocument1" asp-route-id="@Model.ClaimId">Download</a>
+                        </li>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Document2FileName))
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Model.Document2FileName
+                            <a class="btn btn-sm btn-primary" asp-action="DownloadDocument2" asp-route-id="@Model.ClaimId">Download</a>
+                        </li>
+                    }
+                    @if (string.IsNullOrEmpty(Model.Document1FileName) && string.IsNullOrEmpty(Model.Document2FileName))
+                    {
+                        <li class="list-group-item text-muted">No documents uploaded</li>
+                    }
+                </ul>
+            </div>
+
+            <a class="btn btn-secondary mt-3" asp-action="Index">Back to My Claims</a>
+        </div>
+    </div>
+</div>

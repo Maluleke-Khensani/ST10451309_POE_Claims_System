@@ -1,0 +1,44 @@
+﻿@model Claims_System.Models.LecturerClaim
+@{
+    ViewData["Title"] = "Delete Claim";
+}
+
+<a asp-controller="Lecturer" asp-action="Index" class="btn btn-secondary mb-3">
+    Back to Home
+</a>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="position-relative bg-danger text-white rounded shadow-lg p-5">
+                <h2 class="fw-bold"> Confirm Deletion</h2>
+                <p class="lead">This claim will be permanently removed. Please review the details before confirming.</p>
+
+                <div class="bg-white text-dark p-3 rounded mb-4 shadow-sm">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Employee Username</dt>
+                        <dd class="col-sm-8">@Model.Username</dd>
+
+                        <dt class="col-sm-4">Title</dt>
+                        <dd class="col-sm-8">@Model.ModuleName</dd>
+
+                        <dt class="col-sm-4">Hours Worked</dt>
+                        <dd class="col-sm-8">@Model.HoursWorked</dd>
+
+                        <dt class="col-sm-4">Hourly Rate</dt>
+                        <dd class="col-sm-8">@Model.Rate</dd>
+
+                        <dt class="col-sm-4">Notes</dt>
+                        <dd class="col-sm-8">@Model.Notes</dd>
+                    </dl>
+                </div>
+
+                <form asp-action="DeleteConfirmed" method="post" class="d-flex gap-3">
+                    <input type="hidden" asp-for="ClaimId" />
+                    <button type="submit" class="btn btn-dark btn-lg flex-fill">Delete Claim</button>
+                    <a asp-action="Index" class="btn btn-light btn-lg flex-fill">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
