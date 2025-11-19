@@ -1,0 +1,53 @@
+﻿@model Claims_System.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Create User";
+}
+
+<h1>Create User</h1>
+
+<a asp-controller="Home" asp-action="HRDashboard" class="btn btn-secondary mb-3">
+     Back to Home
+</a>
+<form asp-action="CreateUser" method="post">
+    <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+    
+    @if (ViewBag.Roles != null)
+    {
+        <div class="mb-3">
+            <label class="form-label">Hourly Rate (Lecturer only)</label>
+            <input type="number" name="hourlyRate" class="form-control" step="0.01" />
+        </div>
+    }
+
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" />
+    </div>
+
+
+
+
+    <div class="mb-3">
+        <label class="form-label">Role</label>
+        <select name="role" class="form-select">
+            @foreach (var role in ViewBag.Roles)
+            {
+                <option value="@role.Name">@role.Name</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="ListUsers" class="btn btn-secondary ms-2">Cancel</a>
+</form>

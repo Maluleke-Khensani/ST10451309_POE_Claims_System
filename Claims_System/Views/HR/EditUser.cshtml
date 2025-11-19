@@ -1,0 +1,44 @@
+﻿@model Claims_System.Models.EditUserViewModel
+
+<h1>Edit User</h1>
+
+<a asp-controller="Home" asp-action="HRDashboard" class="btn btn-secondary mb-3">
+   Back to Home
+</a>
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label>Full Name</label>
+        <input asp-for="FullName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Role</label>
+        <select asp-for="NewRole" class="form-select">
+            @foreach (var role in Model.AllRoles)
+            {
+                <option value="@role" selected="@(role == Model.CurrentRole)">
+                    @role
+                </option>
+            }
+        </select>
+    </div>
+
+    @if (Model.CurrentRole == "Lecturer" || Model.NewRole == "Lecturer")
+    {
+        <div class="mb-3">
+            <label>Hourly Rate</label>
+            <input asp-for="HourlyRate" class="form-control" step="0.01" />
+        </div>
+    }
+
+    <button class="btn btn-primary">Update</button>
+    <a asp-action="ListUsers" class="btn btn-secondary ms-2">Cancel</a>
+</form>
