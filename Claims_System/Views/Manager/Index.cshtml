@@ -1,0 +1,199 @@
+﻿@model IEnumerable<Claims_System.Models.LecturerClaim>
+
+@{
+    ViewData["Title"] = "Academic Manager Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4">@ViewData["Title"]</h1>
+
+    <div class="d-flex align-items-center">
+        <form method="post" asp-area="Identity" asp-page="/Account/Logout" class="d-inline">
+            <button type="submit" class="btn btn-link nav-link" style="text-decoration:none;">Logout</button>
+        </form>
+    </div>
+</div>
+
+<!-- Tabs Navigation -->
+<ul class="nav nav-tabs" id="claimTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active"
+                id="pending-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#pending"
+                type="button"
+                role="tab"
+                style="background-color:#C4E1E6; color:#000;">
+            Pending
+        </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <button class="nav-link"
+                id="approved-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#approved"
+                type="button"
+                role="tab"
+                style="background-color:#A4CCD9; color:#000;">
+            Approved
+        </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <button class="nav-link"
+                id="rejected-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#rejected"
+                type="button"
+                role="tab"
+                style="background-color:#EBFFD8; color:#000;">
+            Rejected
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content mt-3" id="claimTabsContent">
+
+    <!-- Pending Claims -->
+    <div class="tab-pane fade show active" id="pending" role="tabpanel">
+        <h5 class="mb-3">Pending Claims</h5>
+
+        <table class="table table-hover table-striped align-middle" style="background-color:#fff;">
+            <thead style="background-color:#BF092F; color:#fff;">
+                <tr>
+                    <th>Lecturer</th>
+                    <th>Month</th>
+                    <th>Department</th>
+                    <th>Coordinator Status</th>
+                    <th>Manager Status</th>
+                    <th>Submitted On</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var claim in Model.Where(c => c.ManagerStatus == "Pending"))
+                {
+                    <tr>
+                        <td>@claim.FullName</td>
+                        <td>@claim.Month</td>
+                        <td>@claim.ModuleName</td>
+
+                        <td>
+                            <span class="badge" style="background-color:#8DBCC7; color:#000;">
+                                @claim.CoordinatorStatus
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge" style="background-color:#8DBCC7; color:#000;">Pending</span>
+                        </td>
+
+                        <td>@claim.Submitted</td>
+
+                        <td>
+                            @if (!User.IsInRole("HR"))
+                            {
+                                <a asp-controller="Manager"
+                                   asp-action="ReviewClaim"
+                                   asp-route-claimId="@claim.ClaimId"
+                                   class="btn"
+                                   style="background-color:#C4E1E6; color:#000;">
+                                    Review
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">View Only</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Approved Claims -->
+    <div class="tab-pane fade" id="approved" role="tabpanel">
+        <h5 class="mb-3">Approved Claims</h5>
+
+        <table class="table table-hover table-striped align-middle" style="background-color:#fff;">
+            <thead style="background-color:#BF092F; color:#fff;">
+                <tr>
+                    <th>Lecturer</th>
+                    <th>Month</th>
+                    <th>Department</th>
+                    <th>Coordinator Status</th>
+                    <th>Manager Status</th>
+                    <th>Submitted On</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var claim in Model.Where(c => c.ManagerStatus == "Approved"))
+                {
+                    <tr>
+                        <td>@claim.FullName</td>
+                        <td>@claim.Month</td>
+                        <td>@claim.ModuleName</td>
+
+                        <td>
+                            <span class="badge" style="background-color:#A4CCD9; color:#000;">
+                                @claim.CoordinatorStatus
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge" style="background-color:#A4CCD9; color:#000;">Approved</span>
+                        </td>
+
+                        <td>@claim.Submitted</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Rejected Claims -->
+    <div class="tab-pane fade" id="rejected" role="tabpanel">
+        <h5 class="mb-3">Rejected Claims</h5>
+
+        <table class="table table-hover table-striped align-middle" style="background-color:#fff;">
+            <thead style="background-color:#BF092F; color:#fff;">
+                <tr>
+                    <th>Lecturer</th>
+                    <th>Month</th>
+                    <th>Department</th>
+                    <th>Coordinator Status</th>
+                    <th>Manager Status</th>
+                    <th>Submitted On</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var claim in Model.Where(c => c.ManagerStatus == "Rejected"))
+                {
+                    <tr>
+                        <td>@claim.FullName</td>
+                        <td>@claim.Month</td>
+                        <td>@claim.ModuleName</td>
+
+                        <td>
+                            <span class="badge" style="background-color:#EBFFD8; color:#000;">
+                                @claim.CoordinatorStatus
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge" style="background-color:#EBFFD8; color:#000;">Rejected</span>
+                        </td>
+
+                        <td>@claim.Submitted</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
